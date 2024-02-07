@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using KaamelottSampler.Services;
+using Microsoft.Extensions.Logging;
 
 namespace KaamelottSampler
 {
@@ -18,6 +19,7 @@ namespace KaamelottSampler
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
+            builder.Services.AddSingleton<KaamelottDataService>();
 
             return builder.Build();
         }

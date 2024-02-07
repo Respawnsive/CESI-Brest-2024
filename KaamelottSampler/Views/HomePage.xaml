@@ -2,7 +2,11 @@
 <ContentPage
     x:Class="KaamelottSampler.Views.HomePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:KaamelottSampler.ViewModels">
+    <!--<ContentPage.BindingContext>
+        <vm:HomePageViewModel />
+    </ContentPage.BindingContext>-->
 
     <ScrollView>
         <VerticalStackLayout
@@ -12,27 +16,38 @@
             <Image
                 Aspect="AspectFit"
                 HeightRequest="185"
-                SemanticProperties.Description="dot net bot in a race car number eight"
-                Source="dotnet_bot.png" />
+                Source="logo.png" />
 
-            <Label
-                SemanticProperties.HeadingLevel="Level1"
-                Style="{StaticResource Headline}"
-                Text="Hello, World!"
-                TextColor="Red" />
+            <!--  Liste des Saamples  -->
+            <ListView ItemsSource="{Binding Saamples}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <!--  Définition d'un Row de la liste  -->
+                            <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
+                                <Image
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="0"
+                                    Source="{Binding Imagefile}" />
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    FontSize="Large"
+                                    Text="{Binding Title}" />
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    FontSize="Small"
+                                    Text="{Binding Episode}" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
-            <Label
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                SemanticProperties.HeadingLevel="Level2"
-                Style="{StaticResource SubHeadline}"
-                Text="Welcome to &#10;.NET Multi-platform App UI" />
+            <Button Command="{Binding LoadSamplesCommand}" Text="Charger les saamples" />
 
-            <Button
-                x:Name="CounterBtn"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Fill"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Text="Click me" />
         </VerticalStackLayout>
     </ScrollView>
 

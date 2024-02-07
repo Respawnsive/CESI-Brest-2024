@@ -8,7 +8,12 @@
     Shell.FlyoutBehavior="Disabled">
 
     <ShellContent
-        Title="Home"
+        Title="La liste des Saamples"
+        ContentTemplate="{DataTemplate local:HomePage}"
+        Route="HomePage" />
+
+    <ShellContent
+        Title="Crédit"
         ContentTemplate="{DataTemplate local:HomePage}"
         Route="HomePage" />
 

@@ -1,25 +1,19 @@
-﻿namespace KaamelottSampler.Views
+﻿using KaamelottSampler.Services;
+using KaamelottSampler.ViewModels;
+
+namespace KaamelottSampler.Views
 {
     public partial class HomePage : ContentPage
     {
-        int count = 0;
 
         public HomePage()
         {
             InitializeComponent();
+            var dataservice = this.Handler.MauiContext.Services.GetServices<KaamelottDataService>().FirstOrDefault();
+            BindingContext = new HomePageViewModel(dataservice);
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
-        {
-            count++;
-
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
-        }
+        
     }
 
 }
