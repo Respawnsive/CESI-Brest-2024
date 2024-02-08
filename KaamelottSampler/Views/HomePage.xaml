@@ -3,52 +3,103 @@
     x:Class="KaamelottSampler.Views.HomePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:vm="clr-namespace:KaamelottSampler.ViewModels">
-    <!--<ContentPage.BindingContext>
-        <vm:HomePageViewModel />
-    </ContentPage.BindingContext>-->
+    xmlns:vm="clr-namespace:KaamelottSampler.ViewModels"
+    BackgroundColor="Black">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            BackgroundColor="LightGray"
-            Spacing="25">
-            <Image
-                Aspect="AspectFit"
-                HeightRequest="185"
-                Source="logo.png" />
+    <Grid
+        Margin="10"
+        RowDefinitions="Auto, Auto, *, Auto"
+        RowSpacing="15">
+        <!--  Logo  -->
+        <Image
+            Grid.Row="0"
+            Aspect="AspectFit"
+            HeightRequest="100"
+            HorizontalOptions="Center"
+            Source="logo.png" />
 
-            <!--  Liste des Saamples  -->
-            <ListView ItemsSource="{Binding Saamples}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <!--  Définition d'un Row de la liste  -->
-                            <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
-                                <Image
-                                    Grid.Row="0"
-                                    Grid.RowSpan="2"
-                                    Grid.Column="0"
-                                    Source="{Binding Imagefile}" />
-                                <Label
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    FontSize="Large"
-                                    Text="{Binding Title}" />
-                                <Label
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    FontSize="Small"
-                                    Text="{Binding Episode}" />
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+        <!--  Filtres  -->
 
-            <Button Command="{Binding LoadSamplesCommand}" Text="Charger les saamples" />
+        <Grid
+            Grid.Row="1"
+            ColumnDefinitions="Auto, *"
+            RowDefinitions="Auto, Auto, Auto">
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                Text="Rechercher :" />
+            <Entry
+                Grid.Row="0"
+                Grid.Column="1"
+                Text="{Binding FilterText}" />
+            <Label
+                Grid.Row="1"
+                Grid.Column="0"
+                Text="Personnage :" />
+            <Picker
+                Grid.Row="1"
+                Grid.Column="1"
+                ItemsSource="{Binding FilterCharacterList}"
+                SelectedItem="{Binding FilterSelectedCharacter}" />
+            <Button
+                Grid.Row="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Command="{Binding FilterCommand}"
+                Text="Filtrer" />
+        </Grid>
 
-        </VerticalStackLayout>
-    </ScrollView>
+        <!--  Liste des Saamples  -->
+        <CollectionView
+            Grid.Row="2"
+            ItemsSource="{Binding Saamples}"
+            SelectedItem="{Binding SelectedSaample}"
+            SelectionChangedCommand="{Binding SelectedSaampleCommand}"
+            SelectionChangedCommandParameter="{Binding SelectedSaample}"
+            SelectionMode="Single"
+            VerticalScrollBarVisibility="Always">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <!--  Définition d'un Row de la liste  -->
+                    <Grid
+                        Margin="5"
+                        ColumnDefinitions="Auto, *"
+                        ColumnSpacing="5"
+                        RowDefinitions="Auto, Auto"
+                        RowSpacing="5">
+                        <Image
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="0"
+                            Margin="10"
+                            Aspect="AspectFit"
+                            HeightRequest="100"
+                            Source="{Binding Imagefile, Converter={StaticResource CharacterImageConverter}}" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            FontSize="Medium"
+                            LineBreakMode="WordWrap"
+                            MaxLines="2"
+                            Text="{Binding Title}"
+                            TextColor="White" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            FontAttributes="Italic"
+                            FontSize="Small"
+                            Text="{Binding Episode}"
+                            TextColor="White" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button
+            Grid.Row="3"
+            Command="{Binding LoadSamplesCommand}"
+            Text="Charger les saamples" />
+
+    </Grid>
 
 </ContentPage>

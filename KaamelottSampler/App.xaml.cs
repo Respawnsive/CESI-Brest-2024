@@ -1,4 +1,7 @@
-﻿namespace KaamelottSampler
+﻿using KaamelottSampler.Services;
+using Plugin.Maui.Audio;
+
+namespace KaamelottSampler
 {
     public partial class App : Application
     {
@@ -6,22 +9,23 @@
         {
             InitializeComponent();
 
+            Services = ConfigureServices();
+
             MainPage = new AppShell();
         }
 
-        protected override void OnStart()
-        {
-            base.OnStart();
-        }
+        public new static App Current => (App)Application.Current;
 
-        protected override void OnSleep()
-        {
-            base.OnSleep();
-        }
+        public IServiceProvider Services { get; }
 
-        protected override void OnResume()
+        private static IServiceProvider ConfigureServices()
         {
-            base.OnResume();
+            var services = new ServiceCollection();
+
+            services.AddSingleton(AudioManager.Current);
+            services.AddSingleton<KaamelottDataService>();
+
+            return services.BuildServiceProvider();
         }
     }
 }

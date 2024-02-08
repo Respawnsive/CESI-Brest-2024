@@ -9,8 +9,7 @@ namespace KaamelottSampler.Views
         public HomePage()
         {
             InitializeComponent();
-            var dataservice = this.Handler.MauiContext.Services.GetServices<KaamelottDataService>().FirstOrDefault();
-            BindingContext = new HomePageViewModel(dataservice);
+            BindingContext = new HomePageViewModel();
         }
 
         
