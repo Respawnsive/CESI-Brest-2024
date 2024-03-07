@@ -14,6 +14,7 @@ namespace KaamelottSampler
         {
             Routing.RegisterRoute("HomePage", typeof(HomePage));
             Routing.RegisterRoute("AboutPage", typeof(AboutPage));
+            Routing.RegisterRoute("SampleDetailPage", typeof(SampleDetailPage));
         }
     }
 }

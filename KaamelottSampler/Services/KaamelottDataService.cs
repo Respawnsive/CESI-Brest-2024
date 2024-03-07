@@ -10,7 +10,22 @@ namespace KaamelottSampler.Services
 {
     public class KaamelottDataService
     {
-        public async Task<List<Saample>> GetSaamplesFromJson()
+        public async Task<List<Saample>> GetSaamplesAsync()
+        {
+            //Logique de synchro online/offline
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet
+                || accessType == NetworkAccess.Unknown)
+            {
+                return await GetSaamplesFromApi();
+            }
+            else
+            {
+                return await GetSaamplesFromJson();
+            }
+        }
+
+        private async Task<List<Saample>> GetSaamplesFromJson()
         {
             using var stream = await FileSystem.OpenAppPackageFileAsync("sounds.json");
             using var reader = new StreamReader(stream);
@@ -19,9 +34,13 @@ namespace KaamelottSampler.Services
             return saamples;
         }
 
-        public async Task<List<Saample>> GetSaamplesFromApi()
+        private async Task<List<Saample>> GetSaamplesFromApi()
         {
-            return new List<Saample>();
+            HttpClient client = new HttpClient();
+            var response = await client.GetStringAsync("https://storagekaamelot.blob.core.windows.net/kaamlotcontainer/datas.json");
+            if (response != null)
+                return JsonSerializer.Deserialize<List<Saample>>(response);
+            return await GetSaamplesFromJson();
         }
     }
 }

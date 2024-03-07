@@ -9,6 +9,7 @@
     <Grid
         Margin="10"
         ColumnDefinitions="Auto, Auto"
+        ColumnSpacing="15"
         HorizontalOptions="Center"
         RowDefinitions="Auto"
         RowSpacing="15"
@@ -23,8 +24,14 @@
         <Label
             Grid.Row="0"
             Grid.Column="1"
-            Text="https://github.com/2ec0b4/kaamelott-soundboard"
-            TextColor="White" />
+            FontAttributes="Italic"
+            Text="{Binding CurrentURL}"
+            TextColor="LightBlue"
+            TextDecorations="Underline">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GotoLinkCommand}" NumberOfTapsRequired="1" />
+            </Label.GestureRecognizers>
+        </Label>
     </Grid>
 
 

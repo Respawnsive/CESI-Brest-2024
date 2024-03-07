@@ -14,13 +14,13 @@ namespace KaamelottSampler.ViewModels
     public class HomePageViewModel : ObservableObject
     {
         private readonly KaamelottDataService _dataService;
-        private readonly IAudioManager _audioManager;
+        
         private List<Saample> _AllSamples;
 
         public HomePageViewModel()
         {
             _dataService = App.Current.Services.GetService<KaamelottDataService>();
-            _audioManager = App.Current.Services.GetService<IAudioManager>();
+            Task.Run(async () => await LoadSamplesAsync());
         }
 
         #region BindableProperties
@@ -90,6 +90,18 @@ namespace KaamelottSampler.ViewModels
             }
         }
 
+        private bool _isRefreshing;
+        public bool IsRefreshing
+        {
+            get
+            {
+                return _isRefreshing;
+            }
+            set
+            {
+                SetProperty(ref _isRefreshing, value);
+            }
+        }
 
         #endregion
 
@@ -98,6 +110,16 @@ namespace KaamelottSampler.ViewModels
         public ICommand SelectedSaampleCommand => new Command<Saample>(async (saample) => await SelectSaampleAsync(saample));
 
         public ICommand FilterCommand => new Command(async () => await FilterSamplesAsync());
+
+        //
+        public ICommand ClearCommand => new Command(async () => await ClearFilterAsync());
+
+        private async Task ClearFilterAsync()
+        {
+            FilterText = "";
+            FilterSelectedCharacter = "";
+            await FilterSamplesAsync();
+        }
 
         private async Task FilterSamplesAsync()
         {
@@ -132,25 +154,20 @@ namespace KaamelottSampler.ViewModels
 
         private async Task SelectSaampleAsync(Saample saample)
         {
-            try
+            var param = new ShellNavigationQueryParameters()
             {
-                //Récupéré le fichier MP3 depuis nos "raw assets" (embedded)
-                using var stream = await FileSystem.OpenAppPackageFileAsync(saample.File);
-                //Jouer le mp3
-                var player = _audioManager.CreatePlayer(stream);
-                player.Play();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+                { "saample", saample }
+            };
+            await Shell.Current.GoToAsync("SampleDetailPage", param);
         }
 
         private async Task LoadSamplesAsync()
         {
-            _AllSamples = await _dataService.GetSaamplesFromJson();
+            IsRefreshing = true;
+            _AllSamples = await _dataService.GetSaamplesAsync();
             FilterCharacterList = _AllSamples.Select(s => s.Character).Distinct().OrderBy(x => x).ToList();
             await FilterSamplesAsync();
+            IsRefreshing = false;
         }
     }
 }

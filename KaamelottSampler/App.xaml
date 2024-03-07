@@ -3,15 +3,87 @@
     x:Class="KaamelottSampler.App"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:KaamelottSampler"
-    xmlns:conv="clr-namespace:KaamelottSampler.Converters">
+    xmlns:conv="clr-namespace:KaamelottSampler.Converters"
+    xmlns:dtpl="clr-namespace:KaamelottSampler.Datatemplates"
+    xmlns:local="clr-namespace:KaamelottSampler">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <conv:CharacterImageConverter x:Key="CharacterImageConverter"/>
+            <conv:CharacterImageConverter x:Key="CharacterImageConverter" />
+
+            <DataTemplate x:Key="NormalSaampleTemplate">
+                <!--  Définition d'un Row de la liste  -->
+                <Grid
+                    Margin="5"
+                    ColumnDefinitions="Auto, *"
+                    ColumnSpacing="5"
+                    RowDefinitions="Auto, Auto"
+                    RowSpacing="5">
+                    <Image
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="0"
+                        Margin="10"
+                        Aspect="AspectFit"
+                        HeightRequest="100"
+                        Source="{Binding Imagefile, Converter={StaticResource CharacterImageConverter}}" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        FontSize="Medium"
+                        LineBreakMode="WordWrap"
+                        MaxLines="2"
+                        Text="{Binding Title}"
+                        TextColor="White" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        FontAttributes="Italic"
+                        FontSize="Small"
+                        Text="{Binding Episode}"
+                        TextColor="White" />
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="ArthurSaampleTemplate">
+                <!--  Définition d'un Row de la liste  -->
+                <Grid
+                    Margin="5"
+                    BackgroundColor="RoyalBlue"
+                    ColumnDefinitions="*, Auto"
+                    ColumnSpacing="5"
+                    RowDefinitions="Auto, Auto"
+                    RowSpacing="5">
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        FontSize="Medium"
+                        LineBreakMode="WordWrap"
+                        MaxLines="2"
+                        Text="{Binding Title}" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        FontAttributes="Italic"
+                        FontSize="Small"
+                        Text="{Binding Episode}" />
+                    <Image
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="1"
+                        Margin="10"
+                        Aspect="AspectFit"
+                        HeightRequest="150"
+                        Source="{Binding Imagefile, Converter={StaticResource CharacterImageConverter}}" />
+                </Grid>
+            </DataTemplate>
+            <dtpl:SaampleTemplateSelector
+                x:Key="SaampleDataTemplateSelector"
+                ArthurTemplate="{StaticResource ArthurSaampleTemplate}"
+                NormalTemplate="{StaticResource NormalSaampleTemplate}" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
