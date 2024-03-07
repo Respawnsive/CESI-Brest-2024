@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="KaamelottSampler.Views.AboutPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:KaamelottSampler.ViewModels"
+    BackgroundColor="Black">
+
+    <Grid
+        Margin="10"
+        ColumnDefinitions="Auto, Auto"
+        HorizontalOptions="Center"
+        RowDefinitions="Auto"
+        RowSpacing="15"
+        VerticalOptions="Center">
+
+        <!--  About  -->
+        <Label
+            Grid.Row="0"
+            Grid.Column="0"
+            Text="Crédits :"
+            TextColor="White" />
+        <Label
+            Grid.Row="0"
+            Grid.Column="1"
+            Text="https://github.com/2ec0b4/kaamelott-soundboard"
+            TextColor="White" />
+    </Grid>
+
+
+</ContentPage>

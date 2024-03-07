@@ -4,17 +4,20 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:KaamelottSampler.Views"
-    Title="KaamelottSampler"
-    Shell.FlyoutBehavior="Disabled">
+    Title="KaamelottSampler">
+    <FlyoutItem Title="Accueil" Icon="icon.png">
+        <ShellContent
+            Title="Les Saamples de Kaamelott"
+            ContentTemplate="{DataTemplate local:HomePage}"
+            Route="HomePage" />
+    </FlyoutItem>
 
-    <ShellContent
-        Title="La liste des Saamples"
-        ContentTemplate="{DataTemplate local:HomePage}"
-        Route="HomePage" />
-
-    <ShellContent
-        Title="Crédit"
-        ContentTemplate="{DataTemplate local:HomePage}"
-        Route="HomePage" />
+    <FlyoutItem Title="A Propos" Icon="icon.png">
+        <ShellContent
+            Title="A Propos de Kaamelott Sampler"
+            ContentTemplate="{DataTemplate local:AboutPage}"
+            Icon="icon.png"
+            Route="AboutPage" />
+    </FlyoutItem>
 
 </Shell>
