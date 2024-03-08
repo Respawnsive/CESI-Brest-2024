@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using System.Windows.Input;
 
 namespace KaamelottSampler.ViewModels
 {
-    public class AboutPageViewModel : ObservableObject
+    public class AboutPageViewModel : ReactiveObject
     {
 
         public AboutPageViewModel()
@@ -13,18 +15,9 @@ namespace KaamelottSampler.ViewModels
 
         #region BindableProperties
 
-        private string _currentURL;
-        public string CurrentURL
-        {
-            get
-            {
-                return _currentURL;
-            }
-            set
-            {
-                SetProperty(ref _currentURL, value);
-            }
-        }
+        [Reactive]
+        public string CurrentURL { get; set; }
+
 
         public ICommand GotoLinkCommand => new Command(async () => await OpenLinkURL());
 

@@ -28,7 +28,7 @@
                 Grid.Row="1"
                 ColumnDefinitions="Auto, *, Auto"
                 ColumnSpacing="10"
-                RowDefinitions="Auto, Auto, Auto"
+                RowDefinitions="Auto, Auto"
                 RowSpacing="5">
                 <Label
                     Grid.Row="0"
@@ -58,13 +58,12 @@
                     Grid.Column="2"
                     Clicked="ClearButton_Clicked"
                     Command="{Binding ClearCommand}"
-                    Style="{StaticResource SecondaryButtonStyle}"
                     Text="Effacer" />
-                <Button
+                <!--<Button
                     Grid.Row="2"
                     Grid.Column="1"
                     Command="{Binding FilterCommand}"
-                    Text="Filtrer" />
+                    Text="Filtrer" />-->
             </Grid>
 
             <!--  Liste des Saamples  -->

@@ -2,117 +2,68 @@
 using KaamelottSampler.Models;
 using KaamelottSampler.Services;
 using Plugin.Maui.Audio;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace KaamelottSampler.ViewModels
 {
-    public class HomePageViewModel : ObservableObject
+    public class HomePageViewModel : ReactiveObject
     {
         private readonly KaamelottDataService _dataService;
-        
-        private List<Saample> _AllSamples;
+
+        private List<Saample> _AllSamples = new List<Saample>();
 
         public HomePageViewModel()
         {
             _dataService = App.Current.Services.GetService<KaamelottDataService>();
             Task.Run(async () => await LoadSamplesAsync());
+
+            //Définir nos "réactions"
+            this.WhenAnyValue(x => x.FilterText, x => x.FilterSelectedCharacter)
+                .Skip(1)
+                .Throttle(new TimeSpan(0, 0, 0, 0, 500))
+                .Subscribe(async _ => await FilterSamplesAsync());
         }
 
         #region BindableProperties
 
-        private List<Saample> _saamples;
-        public List<Saample> Saamples 
-        { 
-            get
-            {
-                return _saamples;
-            }
-            set
-            {
-                SetProperty(ref _saamples, value);
-            }
-        }
+        [Reactive]
+        public ObservableCollection<Saample> Saamples { get; set; }
 
-        private Saample _selectedSaample;
-        public Saample SelectedSaample
-        {
-            get
-            {
-                return _selectedSaample;
-            }
-            set
-            {
-                SetProperty(ref _selectedSaample, value);
-            }
-        }
+        [Reactive]
+        public Saample SelectedSaample { get; set; }
 
-        private string _filterText;
-        public string FilterText
-        {
-            get 
-            { 
-                return _filterText; 
-            }
-            set 
-            {
-                SetProperty(ref _filterText, value); 
-            }
-        }
+        [Reactive]
+        public string FilterText { get; set; }
 
-        private string _filterSelectedCharacter;
-        public string FilterSelectedCharacter
-        {
-            get
-            {
-                return _filterSelectedCharacter;
-            }
-            set
-            {
-                SetProperty(ref _filterSelectedCharacter, value);
-            }
-        }
+        [Reactive]
+        public string FilterSelectedCharacter { get; set; }
 
-        private List<string> _filterCharacterList;
-        public List<string> FilterCharacterList
-        {
-            get
-            {
-                return _filterCharacterList;
-            }
-            set
-            {
-                SetProperty(ref _filterCharacterList, value);
-            }
-        }
+        [Reactive]
+        public List<string> FilterCharacterList { get; set; }
 
-        private bool _isRefreshing;
-        public bool IsRefreshing
-        {
-            get
-            {
-                return _isRefreshing;
-            }
-            set
-            {
-                SetProperty(ref _isRefreshing, value);
-            }
-        }
+        [Reactive]
+        public bool IsRefreshing { get; set; }
 
         #endregion
 
-        public ICommand LoadSamplesCommand => new Command(async () => await LoadSamplesAsync());
+        public ICommand LoadSamplesCommand => new Command(async() => await LoadSamplesAsync());
 
         public ICommand SelectedSaampleCommand => new Command<Saample>(async (saample) => await SelectSaampleAsync(saample));
 
         public ICommand FilterCommand => new Command(async () => await FilterSamplesAsync());
 
-        //
-        public ICommand ClearCommand => new Command(async () => await ClearFilterAsync());
+        #region ClearCommand
+        public ReactiveCommand<Unit, Unit> ClearCommand => ReactiveCommand.CreateFromTask(ClearFilterAsync, CanClearFilter);
 
         private async Task ClearFilterAsync()
         {
@@ -121,33 +72,39 @@ namespace KaamelottSampler.ViewModels
             await FilterSamplesAsync();
         }
 
+        public IObservable<bool>? CanClearFilter => 
+            this.WhenAnyValue(x => x.FilterText, x => x.FilterSelectedCharacter,
+             (text, character) => !string.IsNullOrEmpty(text) || !string.IsNullOrEmpty(character));
+
+        #endregion
+
         private async Task FilterSamplesAsync()
         {
             //Pas de filtres
             if (FilterText == null && FilterSelectedCharacter == null)
             {
-                Saamples = _AllSamples;
+                Saamples = new ObservableCollection<Saample>(_AllSamples);
                 return;
             }
 
             //Filtre sur le texte sans characters
             if (FilterText != null && FilterSelectedCharacter == null)
             {
-                Saamples = _AllSamples.Where(s => s.Title.ToLower().Contains(FilterText.ToLower())).ToList();
+                Saamples = new ObservableCollection<Saample>(_AllSamples.Where(s => s.Title.ToLower().Contains(FilterText.ToLower())).ToList());
                 return;
             }
 
             //Filtre sur le character sans texte
             if (FilterText == null && FilterSelectedCharacter != null)
             {
-                Saamples = _AllSamples.Where(s => s.Character == FilterSelectedCharacter).ToList();
+                Saamples = new ObservableCollection<Saample>(_AllSamples.Where(s => s.Character == FilterSelectedCharacter).ToList());
                 return;
             }
 
             //Filtre sur le character et le texte
             if (FilterText != null && FilterSelectedCharacter != null)
             {
-                Saamples = _AllSamples.Where(s => s.Character == FilterSelectedCharacter && s.Title.ToLower().Contains(FilterText.ToLower())).ToList();
+                Saamples = new ObservableCollection<Saample>(_AllSamples.Where(s => s.Character == FilterSelectedCharacter && s.Title.ToLower().Contains(FilterText.ToLower())).ToList());
                 return;
             }
         }

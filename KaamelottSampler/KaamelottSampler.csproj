@@ -65,6 +65,8 @@
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.6" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Plugin.Maui.Audio" Version="2.1.0" />
+		<PackageReference Include="ReactiveUI" Version="19.5.41" />
+		<PackageReference Include="ReactiveUI.Fody" Version="19.5.41" />
 	</ItemGroup>
 
 	<ItemGroup>

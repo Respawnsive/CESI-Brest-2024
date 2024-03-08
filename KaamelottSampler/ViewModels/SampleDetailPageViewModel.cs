@@ -2,6 +2,8 @@
 using KaamelottSampler.Models;
 using KaamelottSampler.Services;
 using Plugin.Maui.Audio;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +14,7 @@ using System.Windows.Input;
 
 namespace KaamelottSampler.ViewModels
 {
-    public class SampleDetailPageViewModel : ObservableObject, IQueryAttributable
+    public class SampleDetailPageViewModel : ReactiveObject, IQueryAttributable
     {
         private readonly IAudioManager _audioManager;
 
@@ -23,21 +25,15 @@ namespace KaamelottSampler.ViewModels
 
         #region BindableProperties
 
-        private Saample _currentSample;
-        public Saample CurrentSample
-        {
-            get
-            {
-                return _currentSample;
-            }
-            set
-            {
-                SetProperty(ref _currentSample, value);
-            }
-        }
+        [Reactive]
+        public Saample CurrentSample { get; set; }
 
+        #endregion
+
+        #region Commands
 
         public ICommand PlayMP3Command => new Command(async () => await PlayMP3());
+
         private async Task PlayMP3()
         {
             //Joue le MP3
@@ -71,6 +67,10 @@ namespace KaamelottSampler.ViewModels
                 Title = CurrentSample.Title
             });
         }
+
+        #endregion
+
+        #region Get Navigation parameters
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
