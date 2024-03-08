@@ -1,4 +1,8 @@
-﻿using KaamelottSampler.Services;
+﻿using Controls.UserDialogs.Maui;
+using KaamelottSampler.Services;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 using Plugin.Maui.Audio;
 
 namespace KaamelottSampler
@@ -8,6 +12,8 @@ namespace KaamelottSampler
         public App()
         {
             InitializeComponent();
+
+            AppCenter.Start("e1f5a50e-6236-4416-8acd-ebe290f4948b", typeof(Analytics), typeof(Crashes));
 
             Services = ConfigureServices();
 
@@ -24,6 +30,7 @@ namespace KaamelottSampler
 
             services.AddSingleton(AudioManager.Current);
             services.AddSingleton<KaamelottDataService>();
+            services.AddSingleton(UserDialogs.Instance);
 
             return services.BuildServiceProvider();
         }

@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using KaamelottSampler.Models;
 using KaamelottSampler.Services;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 using Plugin.Maui.Audio;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -44,28 +46,45 @@ namespace KaamelottSampler.ViewModels
                 //Jouer le mp3
                 var player = _audioManager.CreatePlayer(stream);
                 player.Play();
+                Analytics.TrackEvent("PlayMP3", new Dictionary<string, string> { { "Mp3File", CurrentSample.File } });
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Crashes.TrackError(ex);
             }
         }
 
         public ICommand PlayTTSCommand => new Command(async () => await PlayTTS());
         private async Task PlayTTS()
         {
-            //Joue le TTS
-            await TextToSpeech.Default.SpeakAsync(CurrentSample.Title);
+            try
+            {
+                //Joue le TTS
+                await TextToSpeech.Default.SpeakAsync(CurrentSample.Title);
+                Analytics.TrackEvent("PlayTTS", new Dictionary<string, string> { { "Mp3File", CurrentSample.File } });
+            }
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex);
+            }
         }
 
         public ICommand ShareCommand => new Command(async () => await Share());
         private async Task Share()
         {
-            await Microsoft.Maui.ApplicationModel.DataTransfer.Share.Default.RequestAsync(new ShareTextRequest
+            try
             {
-                Uri = "https://github.com/2ec0b4/kaamelott-soundboard/tree/master/sounds/" + CurrentSample.File,
-                Title = CurrentSample.Title
-            });
+                await Microsoft.Maui.ApplicationModel.DataTransfer.Share.Default.RequestAsync(new ShareTextRequest
+                {
+                    Uri = "https://github.com/2ec0b4/kaamelott-soundboard/tree/master/sounds/" + CurrentSample.File,
+                    Title = CurrentSample.Title
+                });
+                Analytics.TrackEvent("ShareSaample", new Dictionary<string, string> { { "Mp3File", CurrentSample.File } });
+            }
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex);
+            }
         }
 
         #endregion

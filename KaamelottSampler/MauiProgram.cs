@@ -1,6 +1,7 @@
 ﻿using KaamelottSampler.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
+using Controls.UserDialogs.Maui;
 
 namespace KaamelottSampler
 {
@@ -11,6 +12,7 @@ namespace KaamelottSampler
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseUserDialogs(true)
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
