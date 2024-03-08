@@ -6,7 +6,16 @@
     xmlns:vm="clr-namespace:KaamelottSampler.ViewModels"
     BackgroundColor="Black">
 
-    <ContentPage.Resources />
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding LoadSamplesCommand}"
+            IconImageSource="ic_sync.png"
+            Text="Synchroniser" />
+        <ToolbarItem
+            Command="{Binding LoadSamplesCommand}"
+            IconImageSource="ic_sync.png"
+            Text="Synchroniser" />
+    </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
 
