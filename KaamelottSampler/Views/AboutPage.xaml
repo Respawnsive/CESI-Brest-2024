@@ -11,7 +11,7 @@
         ColumnDefinitions="Auto, Auto"
         ColumnSpacing="15"
         HorizontalOptions="Center"
-        RowDefinitions="Auto"
+        RowDefinitions="Auto, Auto, Auto, Auto"
         RowSpacing="15"
         VerticalOptions="Center">
 
@@ -25,13 +25,63 @@
             Grid.Row="0"
             Grid.Column="1"
             FontAttributes="Italic"
-            Text="{Binding CurrentURL}"
+            Text="{Binding GithubURL}"
             TextColor="LightBlue"
             TextDecorations="Underline">
             <Label.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding GotoLinkCommand}" NumberOfTapsRequired="1" />
+                <TapGestureRecognizer Command="{Binding OpenGithubCommand}" NumberOfTapsRequired="1" />
             </Label.GestureRecognizers>
         </Label>
+
+        <!--  Cesi  -->
+        <Label
+            Grid.Row="1"
+            Grid.Column="0"
+            Text="Réalisé par :"
+            TextColor="White" />
+        <Label
+            Grid.Row="1"
+            Grid.Column="1"
+            FontAttributes="Italic"
+            Text="{Binding CesiURL}"
+            TextColor="LightBlue"
+            TextDecorations="Underline">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding OpenCesiCommand}" NumberOfTapsRequired="1" />
+            </Label.GestureRecognizers>
+        </Label>
+
+        <Button
+            Grid.Row="2"
+            Grid.Column="0"
+            Command="{Binding GetLocationCommand}"
+            Text="Localisation"
+            VerticalOptions="Center">
+            <Button.IsVisible>
+                <OnPlatform x:TypeArguments="x:Boolean">
+                    <On Platform="iOS" Value="True" />
+                    <On Platform="Android" Value="True" />
+                    <On Platform="UWP" Value="False" />
+                </OnPlatform>
+            </Button.IsVisible>
+        </Button>
+
+        <Label
+            Grid.Row="2"
+            Grid.Column="1"
+            Text="{Binding CurrentLocation}" />
+
+        <Button
+            Grid.Row="3"
+            Grid.Column="0"
+            Command="{Binding TakePhotoCommand}"
+            Text="Photo"
+            VerticalOptions="Center" />
+        <Image
+            Grid.Row="3"
+            Grid.Column="1"
+            Aspect="AspectFill"
+            Source="{Binding PhotoSource}" />
     </Grid>
 
 
