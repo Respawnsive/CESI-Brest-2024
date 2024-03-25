@@ -11,10 +11,6 @@
             Command="{Binding LoadSamplesCommand}"
             IconImageSource="ic_sync.png"
             Text="Synchroniser" />
-        <ToolbarItem
-            Command="{Binding LoadSamplesCommand}"
-            IconImageSource="ic_sync.png"
-            Text="Synchroniser" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
